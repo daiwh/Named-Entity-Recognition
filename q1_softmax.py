@@ -1,8 +1,9 @@
 import numpy as np
 import tensorflow as tf
 
+
 def softmax(x):
-  """
+    """
   Compute the softmax function in tensorflow.
 
   You might find the tensorflow functions tf.exp, tf.reduce_max,
@@ -19,22 +20,22 @@ def softmax(x):
   Returns:
     out: tf.Tensor with shape (n_sample, n_features). You need to construct this
          tensor in this problem.
-  """
+    """
 
-  ### YOUR CODE HERE
-  maxes = tf.expand_dims(tf.reduce_max(x, reduction_indices=[1]), 1)
-  x_red = x - maxes
-  x_exp = tf.exp(x_red)
-  sums = tf.expand_dims(tf.reduce_sum(x_exp, reduction_indices=[1]), 1)
-  out = x_exp / sums 
-  ### END YOUR CODE
-  
-  return out 
+    # YOUR CODE HERE
+    maxes = tf.expand_dims(tf.reduce_max(x, reduction_indices=[1]), 1)
+    x_red = x - maxes
+    x_exp = tf.exp(x_red)
+    sums = tf.expand_dims(tf.reduce_sum(x_exp, reduction_indices=[1]), 1)
+    out = x_exp / sums
+    # END YOUR CODE
+    return out
+
 
 def cross_entropy_loss(y, yhat):
-  """
-  Compute the cross entropy loss in tensorflow.
-
+    """
+    Compute the cross entropy loss in tensorflow.
+    计算张量流中的交叉熵损失。
   y is a one-hot tensor of shape (n_samples, n_classes) and yhat is a tensor
   of shape (n_samples, n_classes). y should be of dtype tf.int32, and yhat should
   be of dtype tf.float32.
@@ -52,53 +53,55 @@ def cross_entropy_loss(y, yhat):
   Returns:
     out:  tf.Tensor with shape (1,) (Scalar output). You need to construct this
           tensor in the problem.
-  """
-  ### YOUR CODE HERE
-  y = tf.to_float(y)
-  out = -tf.reduce_sum(y * tf.log(yhat)) 
-  ### END YOUR CODE
-  return out
+    """
+    # YOUR CODE HERE
+    y = tf.to_float(y)
+    out = -tf.reduce_sum(y * tf.log(yhat))
+    # END YOUR CODE
+    return out
 
 
 def test_softmax_basic():
-  """
+    """
   Some simple tests to get you started. 
   Warning: these are not exhaustive.
-  """
-  print "Running basic tests..."
-  test1 = softmax(tf.convert_to_tensor(
-      np.array([[1001,1002],[3,4]]), dtype=tf.float32))
-  with tf.Session():
-      test1 = test1.eval()
-  assert np.amax(np.fabs(test1 - np.array(
-      [0.26894142,  0.73105858]))) <= 1e-6
+    """
+    print("Running basic tests...")
+    test1 = softmax(tf.convert_to_tensor(
+        np.array([[1001, 1002], [3, 4]]), dtype=tf.float32))
+    with tf.Session():
+        test1 = test1.eval()
+    assert np.amax(np.fabs(test1 - np.array(
+        [0.26894142, 0.73105858]))) <= 1e-6
 
-  test2 = softmax(tf.convert_to_tensor(
-      np.array([[-1001,-1002]]), dtype=tf.float32))
-  with tf.Session():
-      test2 = test2.eval()
-  assert np.amax(np.fabs(test2 - np.array(
-      [0.73105858, 0.26894142]))) <= 1e-6
+    test2 = softmax(tf.convert_to_tensor(
+        np.array([[-1001, -1002]]), dtype=tf.float32))
+    with tf.Session():
+        test2 = test2.eval()
+    assert np.amax(np.fabs(test2 - np.array(
+        [0.73105858, 0.26894142]))) <= 1e-6
 
-  print "Basic (non-exhaustive) softmax tests pass\n"
+    print("Basic (non-exhaustive) softmax tests pass\n")
+
 
 def test_cross_entropy_loss_basic():
-  """
+    """
   Some simple tests to get you started.
   Warning: these are not exhaustive.
-  """
-  y = np.array([[0, 1], [1, 0], [1, 0]])
-  yhat = np.array([[.5, .5], [.5, .5], [.5, .5]])
+    """
+    y = np.array([[0, 1], [1, 0], [1, 0]])
+    yhat = np.array([[.5, .5], [.5, .5], [.5, .5]])
 
-  test1 = cross_entropy_loss(
-      tf.convert_to_tensor(y, dtype=tf.int32),
-      tf.convert_to_tensor(yhat, dtype=tf.float32))
-  with tf.Session():
-    test1 = test1.eval()
-  result = -3 * np.log(.5)
-  assert np.amax(np.fabs(test1 - result)) <= 1e-6
-  print "Basic (non-exhaustive) cross-entropy tests pass\n"
+    test1 = cross_entropy_loss(
+        tf.convert_to_tensor(y, dtype=tf.int32),
+        tf.convert_to_tensor(yhat, dtype=tf.float32))
+    with tf.Session():
+        test1 = test1.eval()
+    result = -3 * np.log(.5)
+    assert np.amax(np.fabs(test1 - result)) <= 1e-6
+    print("Basic (non-exhaustive) cross-entropy tests pass\n")
+
 
 if __name__ == "__main__":
-  test_softmax_basic()
-  test_cross_entropy_loss_basic()
+    test_softmax_basic()
+    test_cross_entropy_loss_basic()
